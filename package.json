@@ -5,9 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "server": "cd server && node index.js",
+    "start": "concurrently \"npm run serve\" \"npm run server\"" ,
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "concurrently": "^7.0.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.11"
   },

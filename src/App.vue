@@ -1,17 +1,28 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <div id="app">{{ dots }}</div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+import { getDots } from "./api/dots";
 export default {
   name: "App",
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      dots: "ПУСТА",
+    };
+  },
+  created() {
+    this.getDotsFromApi();
+  },
+  methods: {
+    getDotsFromApi() {
+      getDots()
+        .then((res) => {
+          console.log(res);
+          return res.json();
+        })
+        .then((data) => (this.dots = data));
+    },
   },
 };
 </script>

@@ -8,7 +8,7 @@ export default {
   name: "App",
   data() {
     return {
-      dots: "ПУСТА",
+      dots: [],
     };
   },
   created() {

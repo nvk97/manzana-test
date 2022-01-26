@@ -6,12 +6,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "server": "cd server && node index.js",
-    "start": "concurrently \"npm run serve\" \"npm run server\"" ,
+    "start": "concurrently \"npm run serve\" \"npm run server\"",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "concurrently": "^7.0.0",
     "core-js": "^3.6.5",
+    "lodash": "^4.17.21",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
+    "concurrently": "^7.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",

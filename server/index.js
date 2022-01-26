@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const port = 8081;
-const json = require("../server/json/input.json");
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -12,6 +11,7 @@ app.use(function (req, res, next) {
   next();
 });
 app.get("/:file", (req, res) => {
+  const json = require("../server/json/input.json");
   res.header("Content-Type", "application/json");
   res.send(json);
 });

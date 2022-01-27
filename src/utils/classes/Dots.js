@@ -56,6 +56,8 @@ export default class Dots {
   }
   checkLinesIntersect(lines) {
     const [line1, line2] = lines;
+    if (isEqual(line1[0], line1[1]) || isEqual(line2[0], line2[1]))
+      return false;
     for (let dot of line1) {
       if (isEqual(dot, line2[0]) || isEqual(dot, line2[1])) {
         let otherDots = [

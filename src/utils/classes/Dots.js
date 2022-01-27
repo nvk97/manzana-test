@@ -1,32 +1,34 @@
+// eslint-disable-next-line no-unused-vars
 import { cloneDeep, isEqual } from "lodash";
 export default class Dots {
   constructor(dots) {
-    this.inputValue = dots.map((dot) => ({
-      x: parseInt(dot.split(";")[0]),
-      y: parseInt(dot.split(";")[1]),
-    }));
-    this.values = {
-      x: this.inputValue.map((val) => val.x),
-      y: this.inputValue.map((val) => val.y),
-    };
     this.canvasProp = {
       size: 500,
       scale: 3,
       fontSize: 48,
       circleRadius: 7,
     };
-    this.setState("newValues");
+    this.setNewValue(
+      dots.map((dot) => ({
+        x: parseInt(dot.split(";")[0]),
+        y: parseInt(dot.split(";")[1]),
+      }))
+    );
   }
   getDotsValuesByCanvasSize() {
+    const values = {
+      x: this.inputValue.map((val) => val.x),
+      y: this.inputValue.map((val) => val.y),
+    };
     const canvasSize = this.canvasProp.size * this.canvasProp.scale;
-    const lengthX = Math.max(...this.values.x) - Math.min(...this.values.x);
-    const lengthY = Math.max(...this.values.y) - Math.min(...this.values.y);
+    const lengthX = Math.max(...values.x) - Math.min(...values.x);
+    const lengthY = Math.max(...values.y) - Math.min(...values.y);
     const canvasRatio = (
       canvasSize / (lengthX > lengthY ? lengthX : lengthY)
     ).toFixed(2);
     this.canvasDotsValues = this.inputValue.map((dot) => {
-      let x = (dot.x - Math.min(...this.values.x)) * canvasRatio;
-      let y = (dot.y - Math.min(...this.values.y)) * canvasRatio;
+      let x = (dot.x - Math.min(...values.x)) * canvasRatio;
+      let y = (dot.y - Math.min(...values.y)) * canvasRatio;
       x =
         x === 0
           ? this.canvasProp.circleRadius
@@ -54,18 +56,28 @@ export default class Dots {
   }
   checkLinesIntersect(lines) {
     const [line1, line2] = lines;
-    for (let dot of line1) {
-      if (
-        (dot.x - line2[0].x) / (line2[1].x - line2[0].x) ==
-        (dot.y - line2[0].y) / (line2[1].y - line2[0].y)
-      )
-        return true;
-    }
+    // for (let dot of line1) {
+    //   if (!isEqual(line1[1], line2[0]) && !isEqual(line1[0], line2[1]))
+    //     if (
+    //       (dot.x - line2[0].x) / (line2[1].x - line2[0].x) ==
+    //       (dot.y - line2[0].y) / (line2[1].y - line2[0].y)
+    //     )
+    //       return true;
+    // }
+    // for (let dot of line2) {
+    //   if (!isEqual(line1[1], line2[0]) && !isEqual(line1[0], line2[1]))
+    //     if (
+    //       (dot.x - line1[0].x) / (line1[1].x - line1[0].x) ==
+    //       (dot.y - line1[0].y) / (line1[1].y - line1[0].y)
+    //     )
+    //       return true;
+    // }
+
     function vectorMulti(ax, ay, bx, by) {
       return ax * by - bx * ay;
     }
     function realLess(a) {
-      return 0 - a > 0.0001;
+      return 0 - a > 0.001;
     }
     const v1 = vectorMulti(
       line2[1].x - line2[0].x,
@@ -94,12 +106,13 @@ export default class Dots {
     return realLess(v1 * v2) && realLess(v3 * v4);
   }
   tryToCalculateOptimalPath() {
+    this.setState("calculating");
     const getSuccesWay = (values, dots) => {
       const _values = cloneDeep(values);
       if (values.length > 0) {
         for (let idx in values) {
           const currentDot = cloneDeep(values[idx]);
-          const otherDots = _values.filter((val) => !isEqual(val, currentDot));
+          const otherDots = _values.filter((val, index) => idx != index);
           const _dots = dots.concat([currentDot]);
           const res = getSuccesWay(otherDots, _dots);
           if (res) return res;
@@ -126,7 +139,6 @@ export default class Dots {
     }
   }
   setState(state) {
-    console.log(state);
     this._state = state;
     switch (state) {
       case "needToRecalcualteForCanvas":
@@ -136,5 +148,9 @@ export default class Dots {
         this.tryToCalculateOptimalPath();
         break;
     }
+  }
+  setNewValue(value) {
+    this.inputValue = value;
+    this.setState("newValues");
   }
 }

@@ -1,4 +1,4 @@
-import getUrl from "../../utils/getUrl";
+import getUrl from "../../utils/api/getUrl";
 
 const get = {
   url: getUrl("input.json"),

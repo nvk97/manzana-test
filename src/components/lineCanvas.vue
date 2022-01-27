@@ -9,11 +9,13 @@ export default {
   data() {
     return {
       canvas: null,
+      state: "ok",
     };
   },
   methods: {
     drawCanvas() {
       if (!this.canvas) this.setupCanvas();
+      this.clearCanvas();
       this.drawLines();
       for (let [index, dot] of this.canvasDotsValues.entries()) {
         this.drawPoints(dot);
@@ -67,24 +69,46 @@ export default {
       this.canvas.strokeStyle = "green";
       this.canvas.lineWidth = this.canvasProp.circleRadius;
     },
+    clearCanvas() {
+      const { size, scale } = this.canvasProp;
+      this.canvas.clearRect(
+        0,
+        0,
+        Math.floor(size * scale),
+        Math.floor(size * scale)
+      );
+    },
   },
   computed: {
-    canvasDotsValues() {
-      return this.dots.canvasDotsValues;
+    canvasDotsValues: {
+      cache: false,
+      get() {
+        return this.dots.canvasDotsValues;
+      },
     },
-    canvasLinesCords() {
-      return this.dots.canvasLinesCords;
+    canvasLinesCords: {
+      cache: false,
+      get() {
+        return this.dots.canvasLinesCords;
+      },
     },
     canvasProp() {
       return this.dots.canvasProp;
     },
   },
   watch: {
-    dots() {
-      if (this.dots._state === "needToDraw") {
-        this.drawCanvas();
-        this.dots.setState("ok");
-      }
+    dots: {
+      handler: function () {
+        if (this.dots._state === "needToDraw") {
+          this.drawCanvas();
+          this.dots.setState("ok");
+          this.state = "ok";
+        } else if (this.dots._state === "notResolved") {
+          this.clearCanvas();
+          this.state = "error";
+        }
+      },
+      deep: true,
     },
   },
 };
@@ -92,6 +116,7 @@ export default {
 
 <template>
   <div>
+    <div v-if="state === 'error'">Error, cant find way</div>
     <canvas id="line-canvas" ref="lineCanvas" />
   </div>
 </template>
@@ -99,5 +124,7 @@ export default {
 <style lang="scss">
 #line-canvas {
   border: 1px solid #cecece;
+  width: 500px;
+  height: 500px;
 }
 </style>

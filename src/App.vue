@@ -35,7 +35,10 @@ export default {
           return res.json();
         })
         .then((data) => (this.dots = new Dots(data?.dots)))
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          this.dots = new Dots([]);
+          return console.error(err);
+        });
     },
   },
 };

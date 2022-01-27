@@ -71,6 +71,7 @@ export default {
     },
     clearCanvas() {
       const { size, scale } = this.canvasProp;
+      if (!this.canvas) this.setupCanvas();
       this.canvas.clearRect(
         0,
         0,

@@ -56,22 +56,18 @@ export default class Dots {
   }
   checkLinesIntersect(lines) {
     const [line1, line2] = lines;
-    // for (let dot of line1) {
-    //   if (!isEqual(line1[1], line2[0]) && !isEqual(line1[0], line2[1]))
-    //     if (
-    //       (dot.x - line2[0].x) / (line2[1].x - line2[0].x) ==
-    //       (dot.y - line2[0].y) / (line2[1].y - line2[0].y)
-    //     )
-    //       return true;
-    // }
-    // for (let dot of line2) {
-    //   if (!isEqual(line1[1], line2[0]) && !isEqual(line1[0], line2[1]))
-    //     if (
-    //       (dot.x - line1[0].x) / (line1[1].x - line1[0].x) ==
-    //       (dot.y - line1[0].y) / (line1[1].y - line1[0].y)
-    //     )
-    //       return true;
-    // }
+    for (let dot of line1) {
+      if (isEqual(dot, line2[0]) || isEqual(dot, line2[1])) {
+        let otherDots = [
+          line1.filter((val) => !isEqual(dot, val)),
+          line2.filter((val) => !isEqual(dot, val)),
+        ];
+        otherDots = otherDots.flat();
+        const sloper1 = (otherDots[0].x - dot.x) / (otherDots[0].y - dot.y);
+        const sloper2 = (otherDots[1].x - dot.x) / (otherDots[1].y - dot.y);
+        if (sloper1.toFixed(2) == sloper2.toFixed(2)) return true;
+      }
+    }
 
     function vectorMulti(ax, ay, bx, by) {
       return ax * by - bx * ay;

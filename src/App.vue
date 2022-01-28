@@ -1,5 +1,3 @@
-
-
 <script>
 import lineCanvas from "@/components/lineCanvas.vue";
 import addDotsForm from "@/components/addDotsForm.vue";

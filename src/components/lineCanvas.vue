@@ -38,8 +38,7 @@ export default {
           : dot.y - this.canvasProp.circleRadius * 3;
       if (needToChangeAlign) this.canvas.textAlign = "end";
       this.canvas.fillText(
-        `${index + 1}(${this.dots.inputValue[index].x};${this.dots.inputValue[index].y
-        })`,
+        `${index + 1}(${this.dots.inputValue[index].x};${this.dots.inputValue[index].y})`,
         dot.x,
         y
       );
@@ -112,7 +111,7 @@ export default {
         this.clearCanvas();
         this.state = "error";
       }
-    }
+    },
   },
 };
 </script>

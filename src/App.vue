@@ -1,13 +1,4 @@
-<template>
-  <div id="app">
-    <div class="container">
-      <div class="point-visualization">
-        <line-canvas :dots="dots" />
-        <add-dots-form :dots="dots" />
-      </div>
-    </div>
-  </div>
-</template>
+
 
 <script>
 import lineCanvas from "@/components/lineCanvas.vue";
@@ -43,6 +34,17 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div id="app">
+    <div class="container">
+      <div class="point-visualization">
+        <line-canvas :dots="dots" />
+        <add-dots-form :dots="dots" />
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss">
 #app {

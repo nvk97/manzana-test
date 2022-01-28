@@ -38,8 +38,7 @@ export default {
           : dot.y - this.canvasProp.circleRadius * 3;
       if (needToChangeAlign) this.canvas.textAlign = "end";
       this.canvas.fillText(
-        `${index + 1}(${this.dots.inputValue[index].x};${
-          this.dots.inputValue[index].y
+        `${index + 1}(${this.dots.inputValue[index].x};${this.dots.inputValue[index].y
         })`,
         dot.x,
         y
@@ -93,30 +92,33 @@ export default {
         return this.dots.canvasLinesCords;
       },
     },
+    dotsState: {
+      cache: false,
+      get() {
+        return this.dots?.state;
+      },
+    },
     canvasProp() {
       return this.dots.canvasProp;
     },
   },
   watch: {
-    dots: {
-      handler: function () {
-        if (this.dots._state === "needToDraw") {
-          this.drawCanvas();
-          this.dots.setState("ok");
-          this.state = "ok";
-        } else if (this.dots._state === "notResolved") {
-          this.clearCanvas();
-          this.state = "error";
-        }
-      },
-      deep: true,
-    },
+    dotsState(state) {
+      if (state === "needToDraw") {
+        this.drawCanvas();
+        this.dots.setState("ok");
+        this.state = "ok";
+      } else if (state === "notResolved") {
+        this.clearCanvas();
+        this.state = "error";
+      }
+    }
   },
 };
 </script>
 
 <template>
-  <div>
+  <div class="canvas-wrapper">
     <div v-if="state === 'error'">Error, cant find way</div>
     <canvas id="line-canvas" ref="lineCanvas" />
   </div>
@@ -127,5 +129,8 @@ export default {
   border: 1px solid #cecece;
   width: 500px;
   height: 500px;
+}
+.canvas-wrapper {
+  position: relative;
 }
 </style>

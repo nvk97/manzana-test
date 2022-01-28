@@ -56,8 +56,12 @@ export default class Dots {
   }
   checkLinesIntersect(lines) {
     const [line1, line2] = lines;
+    // Проверка если точки одинаковые
     if (isEqual(line1[0], line1[1]) || isEqual(line2[0], line2[1]))
       return false;
+    // Проверка если линии одинаковые
+    if (isEqual(line1, line2.reverse())) return true;
+    // Проверка если точки имеют общую вершину на паралльность
     for (let dot of line1) {
       if (isEqual(dot, line2[0]) || isEqual(dot, line2[1])) {
         let otherDots = [
@@ -70,7 +74,32 @@ export default class Dots {
         if (sloper1.toFixed(2) == sloper2.toFixed(2)) return true;
       }
     }
+    for (let dot of line1) {
+      const dx1 = line2[1].x - line2[0].x;
+      const dy1 = line2[1].y - line2[0].y;
+      const dx = dot.x - line2[0].x;
+      const dy = dot.y - line2[0].y;
+      const isColl = dx1 * dy - dx * dy1 === 0;
+      let isIn =
+        isColl &&
+        ((dot.x < line2[0].x && dot.x > line2[1].x) ||
+          (dot.x > line2[0].x && dot.x < line2[1].x));
+      if (isIn) return true;
+    }
+    for (let dot of line2) {
+      const dx1 = line2[1].x - line2[0].x;
+      const dy1 = line2[1].y - line2[0].y;
+      const dx = dot.x - line2[0].x;
+      const dy = dot.y - line2[0].y;
+      const isColl = dx1 * dy - dx * dy1 === 0;
+      let isIn =
+        isColl &&
+        ((dot.x < line1[0].x && dot.x > line1[1].x) ||
+          (dot.x > line1[0].x && dot.x < line1[1].x));
+      if (isIn) return true;
+    }
 
+    // Проверка на пересечение
     function vectorMulti(ax, ay, bx, by) {
       return ax * by - bx * ay;
     }
@@ -104,7 +133,6 @@ export default class Dots {
     return realLess(v1 * v2) && realLess(v3 * v4);
   }
   tryToCalculateOptimalPath() {
-    this.setState("calculating");
     const getSuccesWay = (values, dots) => {
       const _values = cloneDeep(values);
       if (values.length > 0) {
@@ -137,12 +165,13 @@ export default class Dots {
     }
   }
   setState(state) {
-    this._state = state;
+    this.state = state;
     switch (state) {
       case "needToRecalcualteForCanvas":
         this.getDotsValuesByCanvasSize();
         break;
       case "newValues":
+        this.setState("calculating");
         this.tryToCalculateOptimalPath();
         break;
     }

@@ -84,18 +84,26 @@ export default class Dots {
         isColl &&
         ((dot.x < line2[0].x && dot.x > line2[1].x) ||
           (dot.x > line2[0].x && dot.x < line2[1].x));
+      isIn =
+        isIn ||
+        (dot.y < line2[0].y && dot.y > line2[1].y) ||
+        (dot.y > line2[0].y && dot.y < line2[1].y);
       if (isIn) return true;
     }
     for (let dot of line2) {
-      const dx1 = line2[1].x - line2[0].x;
-      const dy1 = line2[1].y - line2[0].y;
-      const dx = dot.x - line2[0].x;
-      const dy = dot.y - line2[0].y;
+      const dx1 = line1[1].x - line1[0].x;
+      const dy1 = line1[1].y - line1[0].y;
+      const dx = dot.x - line1[0].x;
+      const dy = dot.y - line1[0].y;
       const isColl = dx1 * dy - dx * dy1 === 0;
       let isIn =
         isColl &&
         ((dot.x < line1[0].x && dot.x > line1[1].x) ||
           (dot.x > line1[0].x && dot.x < line1[1].x));
+      isIn =
+        isIn ||
+        (dot.y < line1[0].y && dot.y > line1[1].y) ||
+        (dot.y > line1[0].y && dot.y < line1[1].y);
       if (isIn) return true;
     }
 
